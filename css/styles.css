@@ -37,10 +37,6 @@ ul {
   display: inline-block;
 }
 
-li.faded-out {
-  opacity: 0;
-}
-
 h2 {
   margin: 0;
   text-transform: uppercase;
