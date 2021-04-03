@@ -18,8 +18,8 @@ const h3 = document.createElement("h3");
 let missed = 0;
 
 function getRandomPhraseAsArray(arr) {
-  let randomIndex = Math.floor(Math.random() * phrases.length);
-  let randomPhrase = phrases[randomIndex].split("");
+  let randomIndex = Math.floor(Math.random() * arr.length);
+  let randomPhrase = arr[randomIndex].split("");
   return randomPhrase;
 }
 
