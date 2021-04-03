@@ -1,9 +1,10 @@
 const phrases = [
   "seize the day",
   "just do it",
-  "once upon a time",
+  "once again",
   "it is what it is",
   "never a dull moment",
+  "and one",
 ];
 
 const qwerty = document.getElementById("qwerty");
@@ -12,6 +13,7 @@ const startOverlay = document.getElementById("overlay");
 const startBtn = document.querySelector("#overlay .btn__reset");
 const scoreboard = document.getElementById("scoreboard");
 const images = scoreboard.querySelectorAll("img");
+const h3 = document.createElement("h3");
 
 let missed = 0;
 
@@ -44,6 +46,7 @@ const checkLetter = (button) => {
   for (let i = 0; i < letter.length; i++) {
     if (button === letter[i].textContent) {
       letter[i].classList.add("show");
+      letter[i].classList.add("animate");
       match = button;
     }
   }
@@ -52,16 +55,32 @@ const checkLetter = (button) => {
 
 function reset() {
   const over = document.querySelector(".over");
+  const buttons = qwerty.querySelectorAll("button");
+
   if (over) {
     over.addEventListener("click", () => {
-      window.location.reload();
+      startOverlay.classList.remove("win");
+      startOverlay.classList.remove("lose");
+      h3.textContent = "";
+      missed = 0;
+      while (phraseUl.firstChild) {
+        phraseUl.removeChild(phraseUl.firstChild);
+      }
+      const phraseArray = getRandomPhraseAsArray(phrases);
+      addPhraseToDisplay(phraseArray);
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("chosen");
+        buttons[i].disabled = false;
+      }
+      for (let i = 0; i < images.length; i++) {
+        images[i].src = "images/liveHeart.png";
+      }
     });
   }
 }
 
 // win or lose overlay display function
 const overlayEnd = (result) => {
-  const h3 = document.createElement("h3");
   startOverlay.style.display = "flex";
   startBtn.textContent = "Try Again";
   startBtn.classList.add("over");
@@ -83,9 +102,20 @@ const checkWin = () => {
   if (letterCount === showCount) {
     outcome = true;
     overlayEnd(outcome);
+    reset();
+    return "win";
   } else if (missed > 4) {
     overlayEnd(outcome);
+    reset();
+    return "lose";
   }
+};
+const checkWinTimer = () => {
+  setTimeout(checkWin, 4000);
+};
+
+const stop = () => {
+  clearTimeout(time);
 };
 
 startBtn.addEventListener("click", () => {
@@ -103,6 +133,6 @@ qwerty.addEventListener("click", (e) => {
       images[missed - 1].src = "images/lostHeart.png";
     }
   }
-  checkWin();
-  reset();
+
+  checkWinTimer();
 });
