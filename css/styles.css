@@ -37,6 +37,21 @@ ul {
   display: inline-block;
 }
 
+li.slide {
+  animation-duration: 0.5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 h2 {
   margin: 0;
   text-transform: uppercase;

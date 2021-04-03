@@ -41,7 +41,6 @@ addPhraseToDisplay(phraseArray);
 const checkLetter = (button) => {
   const letter = document.querySelectorAll(".letter");
   let match = null;
-
   for (let i = 0; i < letter.length; i++) {
     if (button === letter[i].textContent) {
       letter[i].classList.add("show");
@@ -51,40 +50,41 @@ const checkLetter = (button) => {
   return match;
 };
 
-function refreshPage() {
-  window.location.reload();
-}
-
 function reset() {
   const over = document.querySelector(".over");
   if (over) {
     over.addEventListener("click", () => {
-      refreshPage();
+      window.location.reload();
     });
   }
 }
 
+// win or lose overlay display function
+const overlayEnd = (result) => {
+  const h3 = document.createElement("h3");
+  startOverlay.style.display = "flex";
+  startBtn.textContent = "Try Again";
+  startBtn.classList.add("over");
+  if (result) {
+    startOverlay.classList.add("win");
+    h3.textContent = "You Won!";
+  } else {
+    startOverlay.classList.add("lose");
+    h3.textContent = "You Lose!";
+  }
+  startOverlay.appendChild(h3);
+};
+
 const checkWin = () => {
   let letterCount = document.querySelectorAll(".letter").length;
   let showCount = document.querySelectorAll(".show").length;
-  const h3 = document.createElement("h3");
+  let outcome = null;
 
   if (letterCount === showCount) {
-    startOverlay.style.display = "flex";
-    startOverlay.classList.add("win");
-    startBtn.textContent = "Try Again";
-    startBtn.classList.add("over");
-    h3.textContent = "You Won!";
-    startOverlay.appendChild(h3);
-    reset();
+    outcome = true;
+    overlayEnd(outcome);
   } else if (missed > 4) {
-    startOverlay.style.display = "flex";
-    startOverlay.classList.add("lose");
-    startBtn.textContent = "Try Again";
-    startBtn.classList.add("over");
-    h3.textContent = "You Lose!";
-    startOverlay.appendChild(h3);
-    reset();
+    overlayEnd(outcome);
   }
 };
 
@@ -104,4 +104,5 @@ qwerty.addEventListener("click", (e) => {
     }
   }
   checkWin();
+  reset();
 });
